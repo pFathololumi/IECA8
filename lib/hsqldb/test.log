@@ -1,0 +1,24 @@
+/*C3*/SET SCHEMA PUBLIC
+drop table poll_choices if exists
+drop table poll if exists
+create table poll (\u000a    code integer not null,\u000a    subject varchar(100) not null,\u000a    primary key (code)\u000a)
+create table poll_choices (\u000a    poll_code integer not null,\u000a    num integer not null,\u000a    choice varchar(100) not null,\u000a    vote_count integer default 0,\u000a    primary key (poll_code, num),\u000a    constraint poll_code_fk foreign key(poll_code)\u000a    references poll(code)\u000a)
+INSERT INTO POLL VALUES(1,'Which color do you like?')
+COMMIT
+INSERT INTO POLL_CHOICES VALUES(1,0,'Red',0)
+COMMIT
+INSERT INTO POLL_CHOICES VALUES(1,1,'Green',0)
+COMMIT
+INSERT INTO POLL_CHOICES VALUES(1,2,'Blue',0)
+COMMIT
+/*C4*/SET SCHEMA PUBLIC
+INSERT INTO POLL VALUES(19,'How are you?')
+COMMIT
+DELETE FROM POLL WHERE CODE=19
+COMMIT
+DISCONNECT
+/*C3*/drop table stockmarket.poll_choices if exists
+drop table stockmarket.poll if exists
+drop table poll_choices if exists
+drop table poll if exists
+DISCONNECT
