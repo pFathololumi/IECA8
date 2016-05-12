@@ -10,6 +10,7 @@
     app.controller('MarketController', ['$scope', '$http', '$interval', function ($scope, $http, $interval) {
 
         $scope.symbolsQ = [];
+        $scope.userInst = [];
 
         $scope.init = function () {
             $http({
@@ -30,7 +31,20 @@
         }
 
         $scope.init();
-       
+
+        $scope.userInst = function () {
+            $http({
+                method: 'GET',
+                url: 'getcustomerins',
+                params: { 'id': $scope.enteredID }
+            }).success(function (data, status, headers, config) {
+                $scope.userInst = data;
+
+            }).error(function (data, status, headers, config) {
+                //alert('Error:' + data);
+            });
+        }
+
         var marketCtrl = this;
         $scope.session = null;
         $scope.notification = null;
@@ -38,7 +52,7 @@
         this.closeNotificationBar = function () {
             $scope.notification = null;
         }
-        
+
         this.doLogin = function () {
             $http({
                 method: 'GET',
@@ -48,7 +62,7 @@
                 console.log((typeof data));
                 if (typeof data !== 'string') {
                     $scope.session = data;
-                    
+                    $scope.userInst();
                 }
                 else
                     $scope.notification = data;
@@ -85,7 +99,7 @@
             $http({
                 method: 'GET',
                 url: 'getinstrument'
-                
+
             }).success(function (data, status, headers, config) {
                 if (typeof data !== 'string') {
                     dataSymbol = data;
@@ -94,20 +108,21 @@
                 }
                 else
                     $scope.notification = data;
-                
-                
+
+
             }).error(function (data, status, headers, config) {
                 alert('Error:' + data);
             });
         }
-   
+
 
         this.updateSymbols = function () {
             alert('not implemented');
         }
-                $interval(function(){
-                    $scope.init();
-                },1000*15);
+        $interval(function () {
+            $scope.init();
+            $scope.userInst();
+        }, 1000 * 15);
 
 
         $scope.userRequests = [];
@@ -119,7 +134,7 @@
 
             alert("SUCCESS: " + $scope.userRequests[len].id + " " + $scope.userRequests[len].instrument + " " + $scope.userRequests[len].price +
                 " " + $scope.userRequests[len].quantity + " " + $scope.userRequests[len].type + " " + $scope.userRequests[len].buyOrSell);
-            var cost = (buyOrSell==='buy')? -1*price*quantity:price*quantity;
+            var cost = (buyOrSell === 'buy') ? -1 * price * quantity : price * quantity;
             $http({
                 method: 'GET',
                 url: 'transaction',
@@ -127,9 +142,9 @@
             }).success(function (data, status, headers, config) {
                 console.log((typeof data));
                 if (typeof data !== 'string') {
-                   $scope.notification= data.Error;
+                    $scope.notification = data.Error;
                 }
-                else{
+                else {
                     $scope.notification = data;
                     $scope.session.money += cost;
                 }
