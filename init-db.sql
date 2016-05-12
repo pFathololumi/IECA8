@@ -1,23 +1,56 @@
-drop table poll_choices if exists;
-drop table poll if exists;
+drop table instr_offer if exists;
+drop table instrument if exists;
+drop table offering if exists;
+drop table customer if exists;
+drop table transaction if exists;
 
-create table poll (
-    code integer not null,
-    subject varchar(100) not null,
-    primary key (code)
+create table customer (
+    id varchar(80) not null,
+    name varchar(80) not null,
+    family varchar(80) not null,
+    balance bigint not null,
+    primary key (id)
 );
 
-create table poll_choices (
-    poll_code integer not null,
-    num integer not null,
-    choice varchar(100) not null,
-    vote_count integer default 0,
-    primary key (poll_code, num),
-    constraint poll_code_fk foreign key(poll_code)
-    references poll(code)
+create table instrument (
+    customer_id varchar(80) not null,
+    symbol varchar(100) not null,
+    quantity bigint not null,
+    primary key (customer_id,symbol),
+    constraint customer_id_fk foreign key(customer_id) references customer(id)
 );
 
-insert into poll values ('1', 'Which color do you like?');
-insert into poll_choices values ('1', 0, 'Red', 0);
-insert into poll_choices values ('1', 1, 'Green', 0);
-insert into poll_choices values ('1', 2, 'Blue', 0);
+create table offering(
+    db_id bigint IDENTITY PRIMARY KEY,
+    customer_id varchar(80) not null,
+    price bigint not null,
+    quantity bigint not null,
+    type varchar(30) not null,
+    kind integer not null,
+    constraint custome_id_fk foreign key(customer_id) references customer(id)
+);
+
+create table instr_offer(
+    instr_cust_id varchar(80) not null,
+    instr_symbol varchar(100) not null,
+    offer_id bigint not null,
+    primary key (instr_cust_id, instr_symbol, offer_id ),
+    constraint instr_fk foreign key(instr_cust_id, instr_symbol) references instrument(customer_id,symbol),
+    constraint offer_id_fk foreign key(offer_id) references offering(db_id)
+);
+
+create table transaction(
+    tr_id bigint IDENTITY PRIMARY KEY,
+    buyer varchar(80) not null,
+    seller varchar(80) not null,
+    instrument varchar(80) not null,
+    typeOfTrade varchar(80) not null,
+    quantity varchar(80) not null,
+    price varchar(80) not null
+);
+
+insert into customer values ('1', 'admin','password',0);
+insert into instrument values ('1', 'RANA', 200);
+insert into offering (customer_id, price, quantity, type, kind) values ('1', 100, 20, 'GTC', 0);
+insert into instr_offer values ('1', 'RANA', 0);
+insert into transaction (buyer, seller, instrument, typeOfTrade, quantity, price) values ('11', '1', 'RANA', 'GTC', '22', '200');
