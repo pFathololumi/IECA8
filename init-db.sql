@@ -46,11 +46,12 @@ create table transaction(
     instrument varchar(80) not null,
     typeOfTrade varchar(80) not null,
     quantity varchar(80) not null,
-    price varchar(80) not null
+    price varchar(80) not null,
+    time timestamp default now
 );
 
 insert into customer values ('1', 'admin','password',0);
 insert into instrument values ('1', 'RANA', 200);
 insert into offering (customer_id, price, quantity, type, kind) values ('1', 100, 20, 'GTC', 0);
 insert into instr_offer values ('1', 'RANA', 0);
-insert into transaction (buyer, seller, instrument, typeOfTrade, quantity, price) values ('11', '1', 'RANA', 'GTC', '22', '200');
+insert into transaction (buyer, seller, instrument, typeOfTrade, quantity, price) values ('11', '1', 'BENZ', 'GTC', '22', '200');

@@ -1,5 +1,5 @@
 ﻿﻿<!DOCTYPE html>
-<html lang="en" ng-app="stockmarket">
+<html lang="en">
 
 <head>
 
@@ -13,7 +13,7 @@
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
 
-<body ng-controller="MarketController as ctrl">
+<body ng-app="stockmarket" ng-controller="MarketController as ctrl">
 
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -130,8 +130,11 @@
                         <h4><i class="fa fa-fw fa-gift"></i>لیست سهام های شما</h4>
                     </div>
                     <div class="panel-body">
-                        <p></p>
-                        <!--<a href="#" class="btn btn-default">Learn More</a>-->
+                        <div ng-repeat="symbol in userInst | orderBy:'name'" class="mystyle">
+
+                            <p><a class="" data-toggle="modal" data-target="#symbol" data-backdrop="static" ng-model="selectSymbol" ng-click="ctrl.select(symbol.name)" ng-hide="!session">{{symbol}}</a></p>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -142,26 +145,17 @@
                     </div>
                     <div class="panel-body">
                         <div ng-repeat="symbol in symbolsQ | orderBy:'name'" class="mystyle">
-                            <!--<label>
-                                {{symbol.name}}
-                                <input type="radio" name="name" value="{{symbol.name}}" required />
-                                <br />
-                            </label>-->
-                            <!--<button type="button" class="mr btn btn-pill-left btn-success" data-toggle="modal" data-target="#symbol" data-backdrop="static">{{symbol.name}}</button>-->
-                            <p><a class="" data-toggle="modal" data-target="#symbol" data-backdrop="static" ng-model="selectSymbol" ng-click="ctrl.select(symbol.name)" ng-hide="!session">{{symbol.name}}</a></p>
 
+                            <p><a class="" data-toggle="modal" data-target="#symbol" data-backdrop="static" ng-model="selectSymbol" ng-click="ctrl.select(symbol.name)" ng-hide="!session">{{symbol.name}}</a></p>
 
                         </div>
 
-                        <!--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, optio corporis quae nulla aspernatur in alias at numquam rerum ea excepturi expedita tenetur assumenda voluptatibus eveniet incidunt dicta nostrum quod?</p>-->
-                        <!--<a href="#" class="btn btn-primary btn-lg">Learn More &raquo;</a>-->
-                        <!--<p><a class="btn btn-default" data-toggle="modal" data-target="#symbol" data-backdrop="static">خرید و فروش سهام</a></p>-->
                     </div>
                 </div>
             </div>
         </div>
         <!-- /.row -->
-        <!-- Section1 -->
+
         <div class="row mystyle">
 
             <div class="col-lg-12">

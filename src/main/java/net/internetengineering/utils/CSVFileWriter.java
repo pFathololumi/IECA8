@@ -26,10 +26,10 @@ public class CSVFileWriter {
             fileWriter.append(COMMA_DELIMITER);
             fileWriter.append(t.quantity);
             fileWriter.append(COMMA_DELIMITER);
-            fileWriter.append(t.buyerRemainedMoney);
-            fileWriter.append(COMMA_DELIMITER);
-            fileWriter.append(t.sellerCurrentMoney);
-            fileWriter.append(COMMA_DELIMITER);
+            // fileWriter.append(t.buyerRemainedMoney);
+            // fileWriter.append(COMMA_DELIMITER);
+            // fileWriter.append(t.sellerCurrentMoney);
+            // fileWriter.append(COMMA_DELIMITER);
             fileWriter.append(NEW_LINE_SEPARATOR);
         } catch (Exception e) {
             System.out.println("Error in CsvFileWriter !!!");

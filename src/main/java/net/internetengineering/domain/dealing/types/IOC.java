@@ -7,6 +7,11 @@ import net.internetengineering.domain.dealing.SellingOffer;
 import net.internetengineering.utils.CSVFileWriter;
 import net.internetengineering.server.StockMarket;
 
+import net.internetengineering.domain.Transaction;
+import net.internetengineering.utils.HSQLUtil;
+import net.internetengineering.model.TransactionDAO;
+import net.internetengineering.exception.DBException;
+
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -39,9 +44,18 @@ public class IOC implements ITypeExecutor {
 
 					Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
 					Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
-					Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,this.getClass().getName(),String.valueOf(buyQuantity),String.valueOf(buyer.getMoney()),
-							String.valueOf(seller.getMoney()));
-					CSVFileWriter.writeCsvFile(t);
+
+					String[] newType = this.getClass().getName().split(".");
+					Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
+
+					//DB
+					try{
+						TransactionDAO.createTransaction(t);
+					} catch (DBException ex) {
+            			out.print(ex.getMessage());
+            		}
+
+					//CSVFileWriter.writeCsvFile(t);
 
 					out.println(offer.getID()+" sold "+buyQuantity+" shares of "+symbol+" @"+buyPrice+" to "+buyingOffers.get(0).getID()+"\n");
 					buyingOffers.remove(0);
@@ -56,9 +70,17 @@ public class IOC implements ITypeExecutor {
 
 					Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
 					Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
-					Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,this.getClass().getName(),String.valueOf(buyQuantity),String.valueOf(buyer.getMoney()),
-							String.valueOf(seller.getMoney()));
-					CSVFileWriter.writeCsvFile(t);
+
+					String[] newType = this.getClass().getName().split(".");
+					Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
+
+					//DB
+					try{
+						TransactionDAO.createTransaction(t);
+					} catch (DBException ex) {
+            			out.print(ex.getMessage());
+            		}
+					//CSVFileWriter.writeCsvFile(t);
 
 					out.println(offer.getID()+" sold "+buyQuantity+" shares of "+symbol+" @"+buyPrice+" to "+buyingOffers.get(0).getID()+"\n");
 					break;
@@ -96,12 +118,39 @@ public class IOC implements ITypeExecutor {
 						sellingOffers.get(0).setQuantity("delete", buyQuantity);
 						//sellingOffers.set(0, sellingOffers.get(0));
 						StockMarket.changeCustomerProperty(sellingOffers.get(0), offer, buyPrice, buyQuantity, symbol);
+
+						Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
+						Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
+
+						String[] newType = this.getClass().getName().split(".");
+						Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
+						//DB
+						try{
+							TransactionDAO.createTransaction(t);
+						} catch (DBException ex) {
+	            			out.print(ex.getMessage());
+	            		}
+
 						out.println(sellingOffers.get(0).getID()+" sold "+buyQuantity+" shares of "+symbol+" @"+buyPrice+" to "+offer.getID()+"\n");
 						break;
 					}
 					else{
 						buyQuantity = sellingOffers.get(0).getQuantity();
 						StockMarket.changeCustomerProperty(sellingOffers.get(0), offer, buyPrice, buyQuantity, symbol);
+
+
+						Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
+						Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
+
+						String[] newType = this.getClass().getName().split(".");
+						Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
+						//DB
+						try{
+							TransactionDAO.createTransaction(t);
+						} catch (DBException ex) {
+	            			out.print(ex.getMessage());
+	            		}
+	            		
 						out.println(sellingOffers.get(0).getID()+" sold "+buyQuantity+" shares of "+symbol+" @"+buyPrice+" to "+offer.getID()+"\n");
 						sellingOffers.remove(0);
 						offer.setQuantity("delete", buyQuantity);

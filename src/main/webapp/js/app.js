@@ -156,4 +156,35 @@
 
     }]);
 
+    app.controller('ReportController', ['$scope', '$http', function ($scope, $http) {
+        $scope.transactions = [];
+
+        $scope.notification = null;
+        
+        this.closeNotificationBar = function () {
+            $scope.notification = null;
+        }
+
+        $scope.init = function () {
+            $http({
+                method: 'GET',
+                url: 'getreport'
+
+            }).success(function (data, status, headers, config) {
+                if (typeof data !== 'string') {
+                    $scope.transactions = data;
+                    //alert('SUCCESS' + data);
+                }
+                else
+                    $scope.notification = data;
+
+            }).error(function (data, status, headers, config) {
+                alert('Error:' + data);
+            });
+        }
+
+        $scope.init();
+
+    }]);
+
 })();

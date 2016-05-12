@@ -27,6 +27,10 @@ public class Customer {
             return id;
     }
 
+    public List<Instrument> getInstruments(){
+        return instruments;
+    }
+
     public void executeTransaction(TransactionType type, Long amount){
             customerAccount.executeTransaction(type,amount);
     }

@@ -14,6 +14,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.internetengineering.domain.Transaction;
+import net.internetengineering.utils.HSQLUtil;
+import net.internetengineering.model.TransactionDAO;
+import net.internetengineering.exception.DBException;
+
 
 /**
  * Created by Hamed Ara on 2/18/2016.
@@ -139,9 +144,18 @@ public class Instrument {
 	    		StockMarket.changeCustomerProperty(sellingOffer, buyingOffer, buyPrice, buyQuantity, sym);
 				Customer seller = StockMarket.getInstance().getCustomer(sellingOffer.getID());
 				Customer buyer = StockMarket.getInstance().getCustomer(buyingOffer.getID());
-				Transaction t = new Transaction(buyer.getId(),seller.getId(),sym,type,String.valueOf(buyQuantity),String.valueOf(buyer.getMoney()),
-						String.valueOf(seller.getMoney()));
-				CSVFileWriter.writeCsvFile(t);
+
+				String[] newType = type.split(".");
+				System.out.println(newType[newType.length-1]);
+				Transaction t = new Transaction(buyer.getId(),seller.getId(),sym,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
+
+				//DB
+					try{
+						TransactionDAO.createTransaction(t);
+					} catch (DBException ex) {
+            			out.print(ex.getMessage());
+            		}
+				//CSVFileWriter.writeCsvFile(t);
 	    		out.println(sellingOffer.getID()+" sold "+buyQuantity+" shares of "+sym+" @"+buyPrice+" to "+buyingOffer.getID());
 	    	}else
 				break;
