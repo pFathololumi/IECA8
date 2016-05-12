@@ -11,61 +11,33 @@ package net.internetengineering.model;
  */
 //STEP 1. Import required packages
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.internetengineering.domain.Transaction;
+import net.internetengineering.exception.DBException;
 import net.internetengineering.myServiceHandlers.MyHttpServlet;
 import net.internetengineering.utils.HSQLUtil;
 @WebServlet("/confdb")
 public class ConfDB extends MyHttpServlet{
-    private static final String b="";
-    
-    
     @Override
-    public void doMyGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-   
-        Connection conn = null;
-        Statement stmt = null;
+    public void doMyGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {   
+        PrintWriter out = response.getWriter();
         try{
-
-             System.out.println("Connecting to database...");
-             conn= HSQLUtil.getInstance().openConnectioin();
-             System.out.println("Creating statement...");
-             Statement st = conn.createStatement();
-		st.executeUpdate("insert into poll values('19', 'How are you?')");
-
-
-		ResultSet rs = st.executeQuery("select * from poll");
-		while (rs.next()) {
-			String subj = rs.getString("subject");
-			System.out.println(rs.getString("code") + '\t' + subj);
-		}
-
-		st.executeUpdate("delete from poll where code = '19'");
-		
-		
-        }catch(SQLException se){
-           //Handle errors for JDBC
-           se.printStackTrace();
+            Transaction t = new Transaction("12", "1", "RANA", "GTC", "22", "200","201");
+            TransactionDAO.createTransaction(t);
+        } catch (DBException ex) {
+            out.print(ex.getMessage());
+            Logger.getLogger(ConfDB.class.getName()).log(Level.SEVERE, null, ex);
         }catch(Exception e){
-           //Handle errors for Class.forName
-           e.printStackTrace();
-        }finally{
-           //finally block used to close resources
-           try{
-              if(stmt!=null)
-                 stmt.close();
-           }catch(SQLException se2){
-           }// nothing we can do
-           try{
-              if(conn!=null)
-                 conn.close();
-           }catch(SQLException se){
-              se.printStackTrace();
-           }//end finally try
-        }//end try
+           out.print("???? ????? ?? ?????? ?? ???? ???.");
+           Logger.getLogger(ConfDB.class.getName()).log(Level.SEVERE, null, e);
+        }
         System.out.println("Goodbye!");
     }
 }
