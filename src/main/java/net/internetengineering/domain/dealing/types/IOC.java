@@ -45,7 +45,7 @@ public class IOC implements ITypeExecutor {
 					Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
 					Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
 
-					String[] newType = this.getClass().getName().split(".");
+					String[] newType = this.getClass().getName().split("\\.");
 					Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
 
 					//DB
@@ -71,7 +71,7 @@ public class IOC implements ITypeExecutor {
 					Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
 					Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
 
-					String[] newType = this.getClass().getName().split(".");
+					String[] newType = this.getClass().getName().split("\\.");
 					Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
 
 					//DB
@@ -122,7 +122,7 @@ public class IOC implements ITypeExecutor {
 						Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
 						Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
 
-						String[] newType = this.getClass().getName().split(".");
+						String[] newType = this.getClass().getName().split("\\.");
 						Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
 						//DB
 						try{
@@ -142,7 +142,7 @@ public class IOC implements ITypeExecutor {
 						Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
 						Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
 
-						String[] newType = this.getClass().getName().split(".");
+						String[] newType = this.getClass().getName().split("\\.");
 						Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
 						//DB
 						try{

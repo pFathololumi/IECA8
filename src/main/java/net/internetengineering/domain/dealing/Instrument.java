@@ -145,7 +145,7 @@ public class Instrument {
 				Customer seller = StockMarket.getInstance().getCustomer(sellingOffer.getID());
 				Customer buyer = StockMarket.getInstance().getCustomer(buyingOffer.getID());
 
-				String[] newType = type.split(".");
+				String[] newType = type.split("\\.");
 				System.out.println(newType[newType.length-1]);
 				Transaction t = new Transaction(buyer.getId(),seller.getId(),sym,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
 

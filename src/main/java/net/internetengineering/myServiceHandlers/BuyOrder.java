@@ -34,7 +34,7 @@ public class BuyOrder{
                     JsonBuilder.writeToJSON(map, response);
 		}catch(Exception e){
                         Map<String,Object> map = new HashMap<String, Object>();
-                        map.put("Error","Mismatched Parameters" );
+                        map.put("Error","Internal Error" );
                         JsonBuilder.writeToJSON(map, response);
 		}
 	}
