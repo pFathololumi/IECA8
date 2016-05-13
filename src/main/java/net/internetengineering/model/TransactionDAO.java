@@ -25,15 +25,25 @@ public class TransactionDAO {
                         "    seller varchar(80) not null," +
                         "    instrument varchar(80) not null," +
                         "    typeOfTrade varchar(80) not null," +
-                        "    quantity varchar(80) not null," +
-                        "    price varchar(80) not null," +
-                        "    time timestamp default now" +
+                        "    quantity bigint not null," +
+                        "    price bigint not null," +
+                        "    tTime timestamp default now" +
                         ")";
     private static final String dropIfExistQuery = "drop table transaction if exists";
     private static final String insertQuery = "insert into transaction "
             + "(buyer, seller, instrument, typeOfTrade, quantity, price) "
             + "values (?, ?, ?, ?, ?, ?)";
-    private static final String selectQuery = "SELECT * FROM transaction order by time";
+    private static final String selectQuery = "select TR_ID,BUYER,BUYERNAME,BUYERFAMILY,BUYERBALANCE,SELLER,NAME as SELLERNAME,FAMILY as SELLERFAMILY,BALANCE as SELLERBALANCE,INSTRUMENT,TYPEOFTRADE,QUANTITY,PRICE,TTime" +
+                                                " from" +
+                                                    " (select TR_ID,BUYER,NAME as BUYERNAME,FAMILY as BUYERFAMILY,BALANCE as BUYERBALANCE,SELLER,INSTRUMENT,TYPEOFTRADE,QUANTITY,PRICE,TTIME" +
+                                                        " from transaction t join customer u on t.BUYER = u.ID) as t1" +
+                                                " join customer u2 on t1.SELLER = u2.ID order by TTIME";
+
+    private static String searchQuery = "select * from (select TR_ID,BUYER,BUYERNAME,BUYERFAMILY,BUYERBALANCE,SELLER,NAME as SELLERNAME,FAMILY as SELLERFAMILY,BALANCE as SELLERBALANCE,INSTRUMENT,TYPEOFTRADE,QUANTITY,PRICE,TTIME" +
+                                                " from" +
+                                                    " (select TR_ID,BUYER,NAME as BUYERNAME,FAMILY as BUYERFAMILY,BALANCE as BUYERBALANCE,SELLER,INSTRUMENT,TYPEOFTRADE,QUANTITY,PRICE,TTIME" +
+                                                        " from transaction t join customer u on t.BUYER = u.ID) as t1" +
+                                                " join customer u2 on t1.SELLER = u2.ID order by TTIME) as res where TR_ID is not null ";
 
     
     public static void createTransaction(Transaction t) throws DBException{
@@ -46,8 +56,8 @@ public class TransactionDAO {
             preparedStatement.setString(2, t.seller);
             preparedStatement.setString(3, t.instrument);
             preparedStatement.setString(4, t.typeOfTrade);
-            preparedStatement.setString(5, t.quantity);
-            preparedStatement.setString(6, t.price);
+            preparedStatement.setLong(5, Long.parseLong(t.quantity));
+            preparedStatement.setLong(6, Long.parseLong(t.price));
             preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             throw new DBException("Unable to execute insert in Transaction table.",ex);
@@ -61,6 +71,77 @@ public class TransactionDAO {
                 throw new DBException("Unable to close connection in Transaction table.",ex);
             }
         }
+    }
+
+    public static ResultSet getSearchResult(String buyerID, String buyerName, String buyerFamily, String sbuyerBalance, String ebuyerBalance, String sellerID, String sellerName, String sellerFamily, String ssellerBalance, String esellerBalance, String instrument, String mytype, String startQuantity, String endQuantity, String startPrice, String endPrice, String startDate, String endDate) throws DBException{
+        Connection dbConnection = null;
+        Statement statement = null;  
+        try {
+            dbConnection= HSQLUtil.getInstance().openConnectioin();
+            statement = dbConnection.createStatement();
+            
+
+            if(buyerID!=null && !buyerID.isEmpty()) 
+                searchQuery += " and BUYER = '"+buyerID+"'";
+            if(buyerName!=null && !buyerName.isEmpty())
+                searchQuery += " and BUYERNAME = '"+buyerName+"'";
+            if(buyerFamily!=null && !buyerFamily.isEmpty())
+                searchQuery += " and BUYERFAMILY = '"+buyerFamily+"'";
+
+            if(sellerID!=null && !sellerID.isEmpty()) 
+                searchQuery += " and SELLER = '"+sellerID+"'";
+            if(sellerName!=null && !sellerName.isEmpty())
+                searchQuery += " and SELLERNAME = '"+sellerName+"'";
+            if(sellerFamily!=null && !sellerFamily.isEmpty())
+                searchQuery += " and SELLERFAMILY = '"+sellerFamily+"'";
+
+            if(instrument!=null && !instrument.isEmpty())
+                searchQuery += " and INSTRUMENT = '"+instrument+"'";
+            if(mytype!=null && !mytype.isEmpty())
+                searchQuery += " and TYPEOFTRADE = '"+mytype+"'";
+             
+            if(sbuyerBalance!=null && !sbuyerBalance.isEmpty())
+                searchQuery+= " and BUYERBALANCE >= "+ Long.parseLong(sbuyerBalance);
+            if(ebuyerBalance!=null && !ebuyerBalance.isEmpty())
+                searchQuery+= " and BUYERBALANCE <= "+ Long.parseLong(ebuyerBalance);
+
+            if(ssellerBalance!=null && !ssellerBalance.isEmpty())
+                searchQuery+= " and SELLERBALANCE >= "+ Long.parseLong(ssellerBalance);
+            if(esellerBalance!=null && !esellerBalance.isEmpty())
+                searchQuery+= " and SELLERBALANCE <= "+ Long.parseLong(esellerBalance);
+
+            if(startQuantity!=null && !startQuantity.isEmpty())
+                searchQuery+= " and QUANTITY >= "+ Long.parseLong(startQuantity);
+            if(endQuantity!=null && !endQuantity.isEmpty())
+                searchQuery+= " and QUANTITY <= "+ Long.parseLong(endQuantity);
+
+            if(startPrice!=null && !startPrice.isEmpty())
+                searchQuery+= " and PRICE >= "+ Long.parseLong(startPrice);
+            if(endPrice!=null && !endPrice.isEmpty())
+                searchQuery+= " and PRICE <= "+ Long.parseLong(endPrice);
+
+
+            if(startDate!=null && !startDate.isEmpty())
+                searchQuery += " and TTIME >= DATE'"+startDate+"'";
+            if(endDate!=null && !endDate.isEmpty())
+                searchQuery += " and TTIME <= DATE'"+endDate+"'";
+                   
+
+
+            return statement.executeQuery(searchQuery);
+
+        } catch (SQLException ex) {
+            throw new DBException("Unable to execute select in Transaction table.",ex);
+        }finally{
+            try {
+                if(statement!=null && !statement.isClosed())
+                    statement.close();
+                if(dbConnection!=null && !dbConnection.isClosed())
+                    dbConnection.close();
+            } catch (SQLException ex) {
+                throw new DBException("Unable to close connection in Transaction table.",ex);
+            }
+        } 
     }
 
     public static ResultSet getAllTransactions() throws DBException{
