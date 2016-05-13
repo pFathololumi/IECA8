@@ -9,8 +9,6 @@ public class Transaction {
     public String instrument;
     public String typeOfTrade;
     public String quantity;
-    // public String buyerRemainedMoney;
-    // public String sellerCurrentMoney;
     public String price;
 
     public Transaction(String buyer, String seller, String instrument, String typeOfTrade, String quantity, String price) {

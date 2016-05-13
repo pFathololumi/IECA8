@@ -5,10 +5,7 @@
  */
 package net.internetengineering.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.ResultSet;
+import java.sql.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,12 +19,23 @@ import net.internetengineering.utils.HSQLUtil;
  * @author Hamed Ara
  */
 public class TransactionDAO {
+    private static final String createTransactionTableQuery = "create table transaction(" +
+                        "    tr_id bigint IDENTITY PRIMARY KEY," +
+                        "    buyer varchar(80) not null," +
+                        "    seller varchar(80) not null," +
+                        "    instrument varchar(80) not null," +
+                        "    typeOfTrade varchar(80) not null," +
+                        "    quantity varchar(80) not null," +
+                        "    price varchar(80) not null," +
+                        "    time timestamp default now" +
+                        ")";
+    private static final String dropIfExistQuery = "drop table transaction if exists";
     private static final String insertQuery = "insert into transaction "
             + "(buyer, seller, instrument, typeOfTrade, quantity, price) "
             + "values (?, ?, ?, ?, ?, ?)";
-
     private static final String selectQuery = "SELECT * FROM transaction order by time";
-                    
+
+    
     public static void createTransaction(Transaction t) throws DBException{
         Connection dbConnection = null;
         PreparedStatement preparedStatement = null;
@@ -57,25 +65,33 @@ public class TransactionDAO {
 
     public static ResultSet getAllTransactions() throws DBException{
         Connection dbConnection = null;
-        PreparedStatement preparedStatement = null;
+        Statement statement = null;
         try {
             dbConnection= HSQLUtil.getInstance().openConnectioin();
-            preparedStatement = dbConnection.prepareStatement(selectQuery);
+            statement = dbConnection.createStatement();
             
-            return preparedStatement.executeQuery();
+            return statement.executeQuery(selectQuery);
 
         } catch (SQLException ex) {
             throw new DBException("Unable to execute select in Transaction table.",ex);
         }finally{
             try {
-                if(preparedStatement!=null && !preparedStatement.isClosed())
-                    preparedStatement.close();
+                if(statement!=null && !statement.isClosed())
+                    statement.close();
                 if(dbConnection!=null && !dbConnection.isClosed())
                     dbConnection.close();
             } catch (SQLException ex) {
                 throw new DBException("Unable to close connection in Transaction table.",ex);
             }
         }
+    }
+    
+    public static void dropTableIfExist(Connection dbConnection) throws SQLException{
+        dbConnection.createStatement().execute(dropIfExistQuery);
+    }
+    
+    public static void createTransactionTable(Connection dbConnection) throws SQLException{
+        dbConnection.createStatement().execute(createTransactionTableQuery);
     }
 
 }
