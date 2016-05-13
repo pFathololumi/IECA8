@@ -27,7 +27,7 @@ public class TransactionDAO {
                         "    typeOfTrade varchar(80) not null," +
                         "    quantity bigint not null," +
                         "    price bigint not null," +
-                        "    tTime timestamp default now" +
+                        "    tTime date default now" +
                         ")";
     private static final String dropIfExistQuery = "drop table transaction if exists";
     private static final String insertQuery = "insert into transaction "
@@ -37,13 +37,15 @@ public class TransactionDAO {
                                                 " from" +
                                                     " (select TR_ID,BUYER,NAME as BUYERNAME,FAMILY as BUYERFAMILY,BALANCE as BUYERBALANCE,SELLER,INSTRUMENT,TYPEOFTRADE,QUANTITY,PRICE,TTIME" +
                                                         " from transaction t join customer u on t.BUYER = u.ID) as t1" +
-                                                " join customer u2 on t1.SELLER = u2.ID order by TTIME";
+                                                " join customer u2 on t1.SELLER = u2.ID order by TR_ID";
 
     private static String searchQuery = "select * from (select TR_ID,BUYER,BUYERNAME,BUYERFAMILY,BUYERBALANCE,SELLER,NAME as SELLERNAME,FAMILY as SELLERFAMILY,BALANCE as SELLERBALANCE,INSTRUMENT,TYPEOFTRADE,QUANTITY,PRICE,TTIME" +
                                                 " from" +
                                                     " (select TR_ID,BUYER,NAME as BUYERNAME,FAMILY as BUYERFAMILY,BALANCE as BUYERBALANCE,SELLER,INSTRUMENT,TYPEOFTRADE,QUANTITY,PRICE,TTIME" +
                                                         " from transaction t join customer u on t.BUYER = u.ID) as t1" +
-                                                " join customer u2 on t1.SELLER = u2.ID order by TTIME) as res where TR_ID is not null ";
+                                                " join customer u2 on t1.SELLER = u2.ID order by TR_ID) as res where TR_ID is not null ";
+
+    private static final String resetSearchQuery = searchQuery;
 
     
     public static void createTransaction(Transaction t) throws DBException{
@@ -80,6 +82,7 @@ public class TransactionDAO {
             dbConnection= HSQLUtil.getInstance().openConnectioin();
             statement = dbConnection.createStatement();
             
+            searchQuery = resetSearchQuery;
 
             if(buyerID!=null && !buyerID.isEmpty()) 
                 searchQuery += " and BUYER = '"+buyerID+"'";
@@ -122,9 +125,9 @@ public class TransactionDAO {
 
 
             if(startDate!=null && !startDate.isEmpty())
-                searchQuery += " and TTIME >= DATE'"+startDate+"'";
+                searchQuery += " and TTIME >= DATE'"+startDate.split("T")[0]+"'";
             if(endDate!=null && !endDate.isEmpty())
-                searchQuery += " and TTIME <= DATE'"+endDate+"'";
+                searchQuery += " and TTIME <= DATE'"+endDate.split("T")[0]+"'";
                    
 
 

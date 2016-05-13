@@ -90,47 +90,47 @@
                         <label id="title">اطلاعات خریدار</label>
                         <div class="form-group">
                             <label for="filter">نام کاربری</label>
-                            <input id="buyerID"  class="form-control" type="text" />
+                            <input ng-model="buyerID"  class="form-control" type="text" />
                             <label for="filter">نام</label>
-                            <input id="buyerName"  class="form-control" type="text" />
+                            <input ng-model="buyerName"  class="form-control" type="text" />
                             <label for="filter">نام خانوادگی</label>
-                            <input id="buyerFamily"  class="form-control" type="text" />
+                            <input ng-model="buyerFamily"  class="form-control" type="text" />
                             <label for="filter">موجودی</label>
-                            <input id="sbuyerBalance" class="form-control" type="text" placeholder="...از" />
-                            <input id="ebuyerBalance" class="form-control" type="text" placeholder="...تا" />
+                            <input ng-model="sbuyerBalance" class="form-control" type="text" placeholder="...از" />
+                            <input ng-model="ebuyerBalance" class="form-control" type="text" placeholder="...تا" />
                         </div>
                         <hr />
                         <label id="title">اطلاعات فروشنده</label>
                         <div class="form-group">
                             <label for="filter">نام کاربری</label>
-                            <input id="sellerID"  class="form-control" type="text" />
+                            <input ng-model="sellerID"  class="form-control" type="text" />
                             <label for="filter">نام</label>
-                            <input id="sellerName" class="form-control" type="text" />
+                            <input ng-model="sellerName" class="form-control" type="text" />
                             <label for="filter">نام خانوادگی</label>
-                            <input id="sellerFamily"  class="form-control" type="text" />
+                            <input ng-model="sellerFamily"  class="form-control" type="text" />
                             <label for="filter">موجودی</label>
-                            <input id="ssellerBalance" class="form-control" type="text" placeholder="...از" />
-                            <input id="esellerBalance" class="form-control" type="text" placeholder="...تا" />
+                            <input ng-model="ssellerBalance" class="form-control" type="text" placeholder="...از" />
+                            <input ng-model="esellerBalance" class="form-control" type="text" placeholder="...تا" />
                         </div>
                         <hr />
                         <label id="title">اطلاعات تراکنش</label>
                         <div class="form-group">
                             <label for="filter">نام سهام</label>
-                            <input id="instrument"  class="form-control" type="text" />
+                            <input ng-model="instrument"  class="form-control" type="text" />
                             <label for="filter">نوع درخواست</label>
-                            <input id="type" class="form-control" type="text" />
+                            <input ng-model="type" class="form-control" type="text" />
                             <br />
                             <label for="filter">مقدار سهام</label>
-                            <input id="startQuantity" class="form-control" type="text" placeholder="...از" />
-                            <input id="endQuantity" class="form-control" type="text" placeholder="...تا" />
+                            <input ng-model="startQuantity" class="form-control" type="text" placeholder="...از" />
+                            <input ng-model="endQuantity" class="form-control" type="text" placeholder="...تا" />
                             <br />
                             <label for="filter">قیمت</label>
-                            <input id="startPrice" class="form-control" type="text" placeholder="...از" />
-                            <input id="endPrice" class="form-control" type="text" placeholder="...تا" />
+                            <input ng-model="startPrice" class="form-control" type="text" placeholder="...از" />
+                            <input ng-model="endPrice" class="form-control" type="text" placeholder="...تا" />
                             
                             <label for="filter">تاریخ</label>
-                            <input id="startDate" class="form-control" type="date" placeholder="...از" />
-                            <input id="endDate" class="form-control" type="date" placeholder="...تا" />
+                            <input ng-model="startDate" class="form-control" type="date" placeholder="...از" />
+                            <input ng-model="endDate" class="form-control" type="date" placeholder="...تا" />
                         </div>
                         
                         <button type="submit" class="btn btn-primary"
@@ -188,9 +188,9 @@
                                             <td>{{transaction.BUYERNAME}}</td>
                                             <td>{{transaction.BUYERFAMILY}}</td>
                                             <td>{{transaction.BUYERBALANCE}}</td>
-                                            <td>{{transaction.NAME}}</td>
-                                            <td>{{transaction.FAMILY}}</td>
-                                            <td>{{transaction.BALANCE}}</td>
+                                            <td>{{transaction.SELLERNAME}}</td>
+                                            <td>{{transaction.SELLERFAMILY}}</td>
+                                            <td>{{transaction.SELLERBALANCE}}</td>
 
                                         </tr>
 

@@ -71,7 +71,7 @@ public class Search extends HttpServlet{
                         int type = rsmd.getColumnType(i);
                         String name = rsmd.getColumnName(i);
                         //if(!name.equals("TR_ID")){
-                            if (type == Types.VARCHAR || type == Types.CHAR || type == Types.TIMESTAMP) {
+                            if (type == Types.VARCHAR || type == Types.CHAR || type == Types.TIMESTAMP || type == Types.DATE) {
                                 //out.print(rs.getString(i));
                                 map.put( name, rs.getString(i));
                             } else {
@@ -99,6 +99,11 @@ public class Search extends HttpServlet{
         response.getWriter().print(transactions);
         response.setContentType("application/json");
 
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request,response);
     }
     
 }
