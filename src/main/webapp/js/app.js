@@ -183,7 +183,30 @@
             });
         }
 
-        $scope.init();
+        //$scope.init();
+
+        this.search = function (buyerID, buyerName, buyerFamily, sbuyerBalance, ebuyerBalance, sellerID, sellerName, sellerFamily, ssellerBalance, esellerBalance, instrument, type, startQuantity, endQuantity, startPrice, endPrice, startDate, endDate) {
+            $http({
+                method: 'GET',
+                url: 'search',
+                params: {
+                    'buyerID': buyerID, 'buyerName': buyerName, 'buyerFamily': buyerFamily, 'sbuyerBalance': sbuyerBalance, 'ebuyerBalance': ebuyerBalance,
+                    'sellerID': sellerID, 'sellerName': sellerName, 'sellerFamily': sellerFamily, 'ssellerBalance': ssellerBalance, 'esellerBalance': esellerBalance,
+                    'instrument':instrument,'type':type,'startQuantity':startQuantity,'endQuantity':endQuantity,'startPrice':startPrice,
+                    'endPrice': endPrice, 'startDate': startDate, 'endDate': endDate
+                }
+            }).success(function (data, status, headers, config) {
+                if (typeof data !== 'string') {
+                    $scope.transactions = data;
+                    //alert('SUCCESS' + data);
+                }
+                else
+                    $scope.notification = data;
+
+            }).error(function (data, status, headers, config) {
+                alert('Error:' + data);
+            });
+        }
 
     }]);
 
