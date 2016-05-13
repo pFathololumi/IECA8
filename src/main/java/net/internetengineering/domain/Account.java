@@ -5,7 +5,7 @@ import net.internetengineering.domain.dealing.TransactionType;
 
 public class Account{
 	private Long balance;
-
+        
 	public Account(){
 		executeTransaction(TransactionType.INITIAL, 0);
 	}

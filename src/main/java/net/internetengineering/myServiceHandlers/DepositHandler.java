@@ -10,19 +10,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.http.HttpServlet;
+import net.internetengineering.exception.DBException;
+import net.internetengineering.utils.HSQLUtil;
 
 @WebServlet("/deposit")
-public class DepositHandler extends MyHttpServlet{
-
-	public void doMyPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+public class DepositHandler extends HttpServlet{
+        @Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
-		try {
+		Connection dbConnection = null;
+                try {
 			String id = request.getParameter("id");
 			Long amount = Long.parseLong(request.getParameter("amount"));
 			if (id == null || id.isEmpty() || amount == null)
 				throw new DataIllegalException("Mismatched Parameters");
-			if (StockMarket.getInstance().containCustomer(id)){
-				StockMarket.getInstance().executeFinancialTransaction(id, TransactionType.DEPOSIT,amount);
+                        dbConnection = HSQLUtil.getInstance().openConnectioin();
+			if (StockMarket.getInstance().containCustomer(id,dbConnection)){
+				StockMarket.getInstance().executeFinancialTransaction(id, TransactionType.DEPOSIT,amount,dbConnection);
 				out.println("Successful");
 			}
 			else {
@@ -33,16 +42,25 @@ public class DepositHandler extends MyHttpServlet{
 		}catch (DataIllegalException ex){
 			out.println(ex.getMessage());
 //			request.setAttribute("errors", logger.getAndFlushMyLogger());
-		}catch (Exception e){
-			out.println("Mismatched Parameters");
-//			request.setAttribute("errors", logger.getAndFlushMyLogger());
-		}
+		} catch (SQLException ex) {
+                    out.print("Database Error happend");
+                    Logger.getLogger(DepositHandler.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (DBException ex) {
+                    out.println(ex.getMessage());
+                    Logger.getLogger(DepositHandler.class.getName()).log(Level.SEVERE, null, ex);
+                } finally{
+                    try {
+                        if(dbConnection!=null&&!dbConnection.isClosed())
+                            dbConnection.close();
+                    } catch (SQLException ex) {
+                    }
+                }
 //		request.getRequestDispatcher("show-info.jsp").forward(request, response);
 
 	}
-
-    public void doMyGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        doMyPost(request,response);
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        doPost(request,response);
     }
 
 }

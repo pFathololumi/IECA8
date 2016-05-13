@@ -13,13 +13,15 @@ import net.internetengineering.model.TransactionDAO;
 import net.internetengineering.exception.DBException;
 
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 
 public class IOC implements ITypeExecutor {
 
 	@Override
-	public void sellingExecute(PrintWriter out, SellingOffer offer, List<SellingOffer> sellingOffers, List<BuyingOffer> buyingOffers, String symbol) {
+	public void sellingExecute(PrintWriter out, SellingOffer offer, List<SellingOffer> sellingOffers, List<BuyingOffer> buyingOffers, String symbol, Connection dbConnection)throws DBException,SQLException {
 		if(buyingOffers.isEmpty()){
 			out.println("Order is declined");
 			return;
@@ -40,10 +42,10 @@ public class IOC implements ITypeExecutor {
 				Long buyQuantity = 0L ;
 				if(buyingOffers.get(0).getQuantity() <= offer.getQuantity()){
 					buyQuantity = buyingOffers.get(0).getQuantity();
-					StockMarket.changeCustomerProperty(offer, buyingOffers.get(0), buyPrice, buyQuantity, symbol);
+					StockMarket.changeCustomerProperty(offer, buyingOffers.get(0), buyPrice, buyQuantity, symbol,dbConnection);
 
-					Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
-					Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
+					Customer seller = StockMarket.getInstance().getCustomer(offer.getID(),dbConnection);
+					Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID(),dbConnection);
 
 					String[] newType = this.getClass().getName().split("\\.");
 					Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
@@ -66,10 +68,10 @@ public class IOC implements ITypeExecutor {
 					buyQuantity = offer.getQuantity();
 					buyingOffers.get(0).setQuantity("delete", buyQuantity);
 					//buyingOffers.set(0, buyingOffers.get(0));
-					StockMarket.changeCustomerProperty(offer, buyingOffers.get(0), buyPrice, buyQuantity, symbol);
+					StockMarket.changeCustomerProperty(offer, buyingOffers.get(0), buyPrice, buyQuantity, symbol,dbConnection);
 
-					Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
-					Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
+					Customer seller = StockMarket.getInstance().getCustomer(offer.getID(),dbConnection);
+					Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID(),dbConnection);
 
 					String[] newType = this.getClass().getName().split("\\.");
 					Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
@@ -92,7 +94,7 @@ public class IOC implements ITypeExecutor {
 	}
 
 	@Override
-	public void buyingExecute(PrintWriter out, BuyingOffer offer, List<SellingOffer> sellingOffers, List<BuyingOffer> buyingOffers, String symbol) {
+	public void buyingExecute(PrintWriter out, BuyingOffer offer, List<SellingOffer> sellingOffers, List<BuyingOffer> buyingOffers, String symbol, Connection dbConnection)throws DBException,SQLException {
 		if(sellingOffers.isEmpty()){
 			out.println("Order is declined");
 			return;
@@ -117,10 +119,10 @@ public class IOC implements ITypeExecutor {
 						buyQuantity = offer.getQuantity();
 						sellingOffers.get(0).setQuantity("delete", buyQuantity);
 						//sellingOffers.set(0, sellingOffers.get(0));
-						StockMarket.changeCustomerProperty(sellingOffers.get(0), offer, buyPrice, buyQuantity, symbol);
+						StockMarket.changeCustomerProperty(sellingOffers.get(0), offer, buyPrice, buyQuantity, symbol,dbConnection);
 
-						Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
-						Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
+						Customer seller = StockMarket.getInstance().getCustomer(offer.getID(),dbConnection);
+						Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID(),dbConnection);
 
 						String[] newType = this.getClass().getName().split("\\.");
 						Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
@@ -136,11 +138,11 @@ public class IOC implements ITypeExecutor {
 					}
 					else{
 						buyQuantity = sellingOffers.get(0).getQuantity();
-						StockMarket.changeCustomerProperty(sellingOffers.get(0), offer, buyPrice, buyQuantity, symbol);
+						StockMarket.changeCustomerProperty(sellingOffers.get(0), offer, buyPrice, buyQuantity, symbol,dbConnection);
 
 
-						Customer seller = StockMarket.getInstance().getCustomer(offer.getID());
-						Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID());
+						Customer seller = StockMarket.getInstance().getCustomer(offer.getID(),dbConnection);
+						Customer buyer = StockMarket.getInstance().getCustomer(buyingOffers.get(0).getID(),dbConnection);
 
 						String[] newType = this.getClass().getName().split("\\.");
 						Transaction t = new Transaction(buyer.getId(),seller.getId(),symbol,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));

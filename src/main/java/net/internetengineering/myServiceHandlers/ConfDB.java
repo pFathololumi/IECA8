@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.internetengineering.domain.Transaction;
@@ -26,13 +27,12 @@ import net.internetengineering.model.InstrumentDAO;
 import net.internetengineering.model.InstrumentOfferingDAO;
 import net.internetengineering.model.OfferingDAO;
 import net.internetengineering.model.TransactionDAO;
-import net.internetengineering.myServiceHandlers.MyHttpServlet;
 import net.internetengineering.utils.HSQLUtil;
 
 @WebServlet("/confdb")
-public class ConfDB extends MyHttpServlet{
+public class ConfDB extends HttpServlet{
     @Override
-    public void doMyGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {   
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {   
         PrintWriter out = response.getWriter();
         Connection dbConnection = null;
         Statement statement = null;
@@ -43,11 +43,17 @@ public class ConfDB extends MyHttpServlet{
             out.print("DataBase configured successfully.");
             System.out.println("DataBase configured successfully.");
         }catch (SQLException ex) {
-            out.print("??? ?? ????? ?? ?????? ????.");
+            out.print("Error in Database");
             Logger.getLogger(ConfDB.class.getName()).log(Level.SEVERE, null, ex);
         }catch(Exception e){
-           out.print("???? ????? ?? ???? ???.");
+           out.print("Internal Error :(");
            Logger.getLogger(ConfDB.class.getName()).log(Level.SEVERE, null, e);
+        }finally{
+            try {
+                if(dbConnection!=null&&!dbConnection.isClosed())
+                    dbConnection.close();
+            } catch (SQLException ex) {
+            }
         }
     }
     protected void dropTablesIfExist(Connection dbConnection) throws SQLException{

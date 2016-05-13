@@ -17,19 +17,19 @@ import net.internetengineering.exception.DataIllegalException;
 import net.internetengineering.model.TransactionDAO;
 import net.internetengineering.utils.JsonBuilder;
 import net.internetengineering.exception.DBException;
-import net.internetengineering.myServiceHandlers.MyHttpServlet;
 import net.internetengineering.utils.HSQLUtil;
 
 
 import java.sql.*;
+import javax.servlet.http.HttpServlet;
 
  
 
 @WebServlet("/admin/reports/getreport")
-public class GetReport extends MyHttpServlet{
+public class GetReport extends HttpServlet{
 
     @Override
-    public void doMyGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         PrintWriter out = response.getWriter();
         JSONArray transactions = new JSONArray();

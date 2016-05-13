@@ -1,0 +1,494 @@
+/*C71*/SET SCHEMA PUBLIC
+drop table instr_offer if exists
+drop table instrument if exists
+drop table offering if exists
+drop table customer if exists
+drop table transaction if exists
+create table customer (    id varchar(80) not null,    name varchar(80) not null,    family varchar(80) not null,    balance bigint not null,    primary key (id))
+INSERT INTO CUSTOMER VALUES('1','admin','password',1000000)
+COMMIT
+create table instrument (    customer_id varchar(80) not null,    symbol varchar(100) not null,    quantity bigint not null,    primary key (customer_id,symbol),    constraint customer_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table offering(    db_id bigint IDENTITY PRIMARY KEY,    customer_id varchar(80) not null,    price bigint not null,    quantity bigint not null,    type varchar(30) not null,    kind integer not null,    constraint custome_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table instr_offer(    instr_cust_id varchar(80) not null,    instr_symbol varchar(100) not null,    offer_id bigint not null,    primary key (instr_cust_id, instr_symbol, offer_id ),    constraint instr_fk foreign key(instr_cust_id, instr_symbol) references instrument(customer_id,symbol) on delete cascade,    constraint offer_id_fk foreign key(offer_id) references offering(db_id) on delete cascade)
+create table transaction(    tr_id bigint IDENTITY PRIMARY KEY,    buyer varchar(80) not null,    seller varchar(80) not null,    instrument varchar(80) not null,    typeOfTrade varchar(80) not null,    quantity varchar(80) not null,    price varchar(80) not null,    time timestamp default now)
+DISCONNECT
+/*C72*/SET SCHEMA PUBLIC
+INSERT INTO INSTRUMENT VALUES('1','RENA',10)
+COMMIT
+DISCONNECT
+/*C73*/SET SCHEMA PUBLIC
+drop table instr_offer if exists
+drop table instrument if exists
+drop table offering if exists
+drop table customer if exists
+drop table transaction if exists
+create table customer (    id varchar(80) not null,    name varchar(80) not null,    family varchar(80) not null,    balance bigint not null,    primary key (id))
+INSERT INTO CUSTOMER VALUES('1','admin','password',1000000)
+COMMIT
+create table instrument (    customer_id varchar(80) not null,    symbol varchar(100) not null,    quantity bigint not null,    primary key (customer_id,symbol),    constraint customer_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table offering(    db_id bigint IDENTITY PRIMARY KEY,    customer_id varchar(80) not null,    price bigint not null,    quantity bigint not null,    type varchar(30) not null,    kind integer not null,    constraint custome_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table instr_offer(    instr_cust_id varchar(80) not null,    instr_symbol varchar(100) not null,    offer_id bigint not null,    primary key (instr_cust_id, instr_symbol, offer_id ),    constraint instr_fk foreign key(instr_cust_id, instr_symbol) references instrument(customer_id,symbol) on delete cascade,    constraint offer_id_fk foreign key(offer_id) references offering(db_id) on delete cascade)
+create table transaction(    tr_id bigint IDENTITY PRIMARY KEY,    buyer varchar(80) not null,    seller varchar(80) not null,    instrument varchar(80) not null,    typeOfTrade varchar(80) not null,    quantity varchar(80) not null,    price varchar(80) not null,    time timestamp default now)
+DISCONNECT
+/*C74*/SET SCHEMA PUBLIC
+INSERT INTO INSTRUMENT VALUES('1','RENA',10)
+COMMIT
+DISCONNECT
+/*C75*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C76*/SET SCHEMA PUBLIC
+drop table instr_offer if exists
+drop table instrument if exists
+drop table offering if exists
+drop table customer if exists
+drop table transaction if exists
+create table customer (    id varchar(80) not null,    name varchar(80) not null,    family varchar(80) not null,    balance bigint not null,    primary key (id))
+INSERT INTO CUSTOMER VALUES('1','admin','password',1000000)
+COMMIT
+create table instrument (    customer_id varchar(80) not null,    symbol varchar(100) not null,    quantity bigint not null,    primary key (customer_id,symbol),    constraint customer_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table offering(    db_id bigint IDENTITY PRIMARY KEY,    customer_id varchar(80) not null,    price bigint not null,    quantity bigint not null,    type varchar(30) not null,    kind integer not null,    constraint custome_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table instr_offer(    instr_cust_id varchar(80) not null,    instr_symbol varchar(100) not null,    offer_id bigint not null,    primary key (instr_cust_id, instr_symbol, offer_id ),    constraint instr_fk foreign key(instr_cust_id, instr_symbol) references instrument(customer_id,symbol) on delete cascade,    constraint offer_id_fk foreign key(offer_id) references offering(db_id) on delete cascade)
+create table transaction(    tr_id bigint IDENTITY PRIMARY KEY,    buyer varchar(80) not null,    seller varchar(80) not null,    instrument varchar(80) not null,    typeOfTrade varchar(80) not null,    quantity varchar(80) not null,    price varchar(80) not null,    time timestamp default now)
+DISCONNECT
+/*C77*/SET SCHEMA PUBLIC
+INSERT INTO INSTRUMENT VALUES('1','RENA',10)
+COMMIT
+DISCONNECT
+/*C78*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C79*/SET SCHEMA PUBLIC
+drop table instr_offer if exists
+drop table instrument if exists
+drop table offering if exists
+drop table customer if exists
+drop table transaction if exists
+create table customer (    id varchar(80) not null,    name varchar(80) not null,    family varchar(80) not null,    balance bigint not null,    primary key (id))
+INSERT INTO CUSTOMER VALUES('1','admin','password',1000000)
+COMMIT
+create table instrument (    customer_id varchar(80) not null,    symbol varchar(100) not null,    quantity bigint not null,    primary key (customer_id,symbol),    constraint customer_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table offering(    db_id bigint IDENTITY PRIMARY KEY,    customer_id varchar(80) not null,    price bigint not null,    quantity bigint not null,    type varchar(30) not null,    kind integer not null,    constraint custome_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table instr_offer(    instr_cust_id varchar(80) not null,    instr_symbol varchar(100) not null,    offer_id bigint not null,    primary key (instr_cust_id, instr_symbol, offer_id ),    constraint instr_fk foreign key(instr_cust_id, instr_symbol) references instrument(customer_id,symbol) on delete cascade,    constraint offer_id_fk foreign key(offer_id) references offering(db_id) on delete cascade)
+create table transaction(    tr_id bigint IDENTITY PRIMARY KEY,    buyer varchar(80) not null,    seller varchar(80) not null,    instrument varchar(80) not null,    typeOfTrade varchar(80) not null,    quantity varchar(80) not null,    price varchar(80) not null,    time timestamp default now)
+DISCONNECT
+/*C80*/SET SCHEMA PUBLIC
+INSERT INTO INSTRUMENT VALUES('1','RENA',10)
+COMMIT
+DISCONNECT
+/*C81*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C82*/SET SCHEMA PUBLIC
+drop table instr_offer if exists
+drop table instrument if exists
+drop table offering if exists
+drop table customer if exists
+drop table transaction if exists
+create table customer (    id varchar(80) not null,    name varchar(80) not null,    family varchar(80) not null,    balance bigint not null,    primary key (id))
+INSERT INTO CUSTOMER VALUES('1','admin','password',1000000)
+COMMIT
+create table instrument (    customer_id varchar(80) not null,    symbol varchar(100) not null,    quantity bigint not null,    primary key (customer_id,symbol),    constraint customer_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table offering(    db_id bigint IDENTITY PRIMARY KEY,    customer_id varchar(80) not null,    price bigint not null,    quantity bigint not null,    type varchar(30) not null,    kind integer not null,    constraint custome_id_fk foreign key(customer_id) references customer(id) on delete cascade)
+create table instr_offer(    instr_cust_id varchar(80) not null,    instr_symbol varchar(100) not null,    offer_id bigint not null,    primary key (instr_cust_id, instr_symbol, offer_id ),    constraint instr_fk foreign key(instr_cust_id, instr_symbol) references instrument(customer_id,symbol) on delete cascade,    constraint offer_id_fk foreign key(offer_id) references offering(db_id) on delete cascade)
+create table transaction(    tr_id bigint IDENTITY PRIMARY KEY,    buyer varchar(80) not null,    seller varchar(80) not null,    instrument varchar(80) not null,    typeOfTrade varchar(80) not null,    quantity varchar(80) not null,    price varchar(80) not null,    time timestamp default now)
+DISCONNECT
+/*C83*/SET SCHEMA PUBLIC
+INSERT INTO INSTRUMENT VALUES('1','RENA',10)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1000000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1000000)
+COMMIT
+INSERT INTO OFFERING VALUES(0,'1',20,10,'GTC',0)
+COMMIT
+INSERT INTO INSTR_OFFER VALUES('1','RENA',0)
+COMMIT
+DISCONNECT
+/*C84*/SET SCHEMA PUBLIC
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',0)
+COMMIT
+DISCONNECT
+/*C85*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',0)
+COMMIT
+DISCONNECT
+/*C86*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',0)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',0)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',20000000)
+COMMIT
+DISCONNECT
+/*C87*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',20000000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19996000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19996000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1000000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19996000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1004000)
+COMMIT
+DELETE FROM INSTRUMENT WHERE CUSTOMER_ID='1' AND SYMBOL='RENA'
+INSERT INTO INSTRUMENT VALUES('1','RENA',2)
+COMMIT
+INSERT INTO INSTRUMENT VALUES('2','RENA',2)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1004000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19996000)
+COMMIT
+/*C88*/SET SCHEMA PUBLIC
+INSERT INTO TRANSACTION VALUES(0,'2','1','RENA','GTC','2','2000','2016-05-14 02:22:20.953000')
+COMMIT
+DISCONNECT
+/*C87*/INSERT INTO OFFERING VALUES(1,'2',2000,2,'GTC',1)
+COMMIT
+INSERT INTO INSTR_OFFER VALUES('2','RENA',1)
+COMMIT
+DISCONNECT
+/*C89*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19996000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19992000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19992000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1004000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19992000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1008000)
+COMMIT
+DELETE FROM INSTRUMENT WHERE CUSTOMER_ID='1' AND SYMBOL='RENA'
+INSERT INTO INSTRUMENT VALUES('1','RENA',2)
+COMMIT
+DELETE FROM INSTRUMENT WHERE CUSTOMER_ID='2' AND SYMBOL='RENA'
+INSERT INTO INSTRUMENT VALUES('2','RENA',2)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1008000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19992000)
+COMMIT
+/*C90*/SET SCHEMA PUBLIC
+INSERT INTO TRANSACTION VALUES(1,'2','1','RENA','GTC','2','2000','2016-05-14 02:30:40.858000')
+COMMIT
+DISCONNECT
+/*C89*/INSERT INTO OFFERING VALUES(2,'2',2000,2,'GTC',1)
+COMMIT
+INSERT INTO INSTR_OFFER VALUES('2','RENA',2)
+COMMIT
+DISCONNECT
+/*C91*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19992000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1008000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1012000)
+COMMIT
+DELETE FROM INSTRUMENT WHERE CUSTOMER_ID='1' AND SYMBOL='RENA'
+INSERT INTO INSTRUMENT VALUES('1','RENA',2)
+COMMIT
+DELETE FROM INSTRUMENT WHERE CUSTOMER_ID='2' AND SYMBOL='RENA'
+INSERT INTO INSTRUMENT VALUES('2','RENA',2)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1012000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C92*/SET SCHEMA PUBLIC
+INSERT INTO TRANSACTION VALUES(2,'2','1','RENA','GTC','2','2000','2016-05-14 02:34:55.380000')
+COMMIT
+DISCONNECT
+/*C91*/INSERT INTO OFFERING VALUES(3,'2',2000,2,'GTC',1)
+COMMIT
+INSERT INTO INSTR_OFFER VALUES('2','RENA',3)
+COMMIT
+DISCONNECT
+/*C93*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C95*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C97*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C98*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C94*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C96*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C99*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C104*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C101*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C103*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C102*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C105*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C100*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C106*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C107*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C108*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C109*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C110*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C112*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C111*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DISCONNECT
+/*C113*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C114*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C115*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C116*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C117*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C118*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C120*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C121*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C122*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C119*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C123*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C124*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C119*/DISCONNECT
+/*C125*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C126*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DISCONNECT
+/*C132*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C130*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C128*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C127*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C129*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C130*/DISCONNECT
+/*C128*/DISCONNECT
+/*C129*/DISCONNECT
+/*C127*/DISCONNECT
+/*C131*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DISCONNECT
+/*C134*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C135*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C136*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C137*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C138*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DISCONNECT
+/*C133*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DISCONNECT
+/*C140*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C141*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C139*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C142*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+/*C141*/DISCONNECT
+/*C139*/DISCONNECT
+/*C142*/DISCONNECT
+/*C140*/DISCONNECT
+/*C143*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C144*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C145*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C146*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C147*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C148*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DISCONNECT
+/*C149*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DISCONNECT
+/*C150*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C151*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C152*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C153*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C154*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C155*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C156*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C157*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C158*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C159*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C160*/SET SCHEMA PUBLIC
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19988000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19987000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1012000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19987000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1013000)
+COMMIT
+/*C161*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C162*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C160*/DELETE FROM INSTRUMENT WHERE CUSTOMER_ID='1' AND SYMBOL='RENA'
+INSERT INTO INSTRUMENT VALUES('1','RENA',1)
+COMMIT
+/*C163*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C160*/DELETE FROM INSTRUMENT WHERE CUSTOMER_ID='2' AND SYMBOL='RENA'
+INSERT INTO INSTRUMENT VALUES('2','RENA',3)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='1'
+INSERT INTO CUSTOMER VALUES('1','admin','password',1013000)
+COMMIT
+DELETE FROM CUSTOMER WHERE ID='2'
+INSERT INTO CUSTOMER VALUES('2','ali','alaci',19987000)
+COMMIT
+/*C164*/SET SCHEMA PUBLIC
+INSERT INTO TRANSACTION VALUES(3,'2','1','RENA','GTC','1','1000','2016-05-14 02:51:08.351000')
+COMMIT
+DISCONNECT
+/*C165*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C166*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C160*/INSERT INTO OFFERING VALUES(4,'2',1000,1,'GTC',1)
+COMMIT
+/*C167*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C168*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C160*/INSERT INTO INSTR_OFFER VALUES('2','RENA',4)
+COMMIT
+/*C169*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C170*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C171*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C160*/DISCONNECT
+/*C172*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C173*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C174*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C175*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C176*/SET SCHEMA PUBLIC
+DISCONNECT

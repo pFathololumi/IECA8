@@ -1,11 +1,16 @@
 package net.internetengineering.domain;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import net.internetengineering.domain.dealing.Instrument;
 import net.internetengineering.domain.dealing.Offering;
 import net.internetengineering.domain.dealing.TransactionType;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.internetengineering.exception.DBException;
+import net.internetengineering.model.CustomerDAO;
+import net.internetengineering.model.InstrumentDAO;
 
 
 public class Customer {
@@ -31,8 +36,9 @@ public class Customer {
         return instruments;
     }
 
-    public void executeTransaction(TransactionType type, Long amount){
+    public void executeTransaction(TransactionType type, Long amount, Connection dbConnection) throws SQLException{
             customerAccount.executeTransaction(type,amount);
+            CustomerDAO.updateBalance(id, customerAccount.getBalance(), dbConnection);
     }
 
     public Long getMoney(){
@@ -52,22 +58,33 @@ public class Customer {
             return false;
     }
 
-    public void updateInstruments(String type,Long count,String name){
+    public void updateInstruments(String type,Long count,String name,Connection dbConnection) throws SQLException, DBException{
             boolean flag = false;
+            List<Instrument> instruments = InstrumentDAO.findByCustomerID(id, dbConnection);
             for(Instrument i : instruments){
                     if(i.symbolIsMatched(name)){
                             i.changeQuantity(type, count);
+                            InstrumentDAO.updateQuantity(id, name, i.getQuantity(), dbConnection);
                             flag = true;
                             break;
                     }
             }
             if(!flag){
-                    instruments.add(new Instrument(name, count));
+//                    instruments.add(new Instrument(name, count));
+                    InstrumentDAO.insertNewInstrument(id, name, count, dbConnection);
             }
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setInstruments(List<Instrument> instruments) {
+        this.instruments = instruments;
+    }
+    
+    public String getFamily() {
+        return family;
     }
     
 }

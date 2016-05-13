@@ -9,6 +9,8 @@ import net.internetengineering.utils.CSVFileWriter;
 import net.internetengineering.server.StockMarket;
 
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,7 +31,7 @@ public class Instrument {
     private List<SellingOffer> sellingOffers;
     private List<BuyingOffer> buyingOffers;
 
-	public Instrument(String sym,Long quantity) {
+    public Instrument(String sym,Long quantity) {
         this.symbol = sym;
         this.quantity = quantity;
         this.sellingOffers = new ArrayList<SellingOffer>();
@@ -53,32 +55,32 @@ public class Instrument {
 		return buyingOffers;
 	}
 
-	public void initialOfferLists(){
-		initialBuyingOfferList();
-		initialSellingOfferList();
-	}
+//	public void initialOfferLists(){
+//		initialBuyingOfferList();
+//		initialSellingOfferList();
+//	}
+//
+//	private void initialBuyingOfferList(){
+//		BuyingOffer b = new BuyingOffer(440L,55L,"KQL","45");
+//		buyingOffers.add(b);
+//		b=new BuyingOffer(44L,56L,"ZDF","85");
+//		buyingOffers.add(b);
+//	}
+//
+//	private void initialSellingOfferList(){
+//		SellingOffer s = new SellingOffer(220L,130L,"GTC","12");
+//		sellingOffers.add(s);
+//		s = new SellingOffer(22L,13L,"MTF","11");
+//		sellingOffers.add(s);
+//	}
 
-	private void initialBuyingOfferList(){
-		BuyingOffer b = new BuyingOffer(440L,55L,"KQL","45");
-		buyingOffers.add(b);
-		b=new BuyingOffer(44L,56L,"ZDF","85");
-		buyingOffers.add(b);
-	}
-
-	private void initialSellingOfferList(){
-		SellingOffer s = new SellingOffer(220L,130L,"GTC","12");
-		sellingOffers.add(s);
-		s = new SellingOffer(22L,13L,"MTF","11");
-		sellingOffers.add(s);
-	}
-
-    public void executeSellingByType(PrintWriter out, SellingOffer offer) throws DataIllegalException {
+    public void executeSellingByType(PrintWriter out, SellingOffer offer,Connection dbConnection) throws DataIllegalException, DBException, SQLException {
 		try {
 			System.out.println( GTC.class.getName());
 			Class clazz = Class.forName("net.internetengineering.domain.dealing.types."+offer.getType());
 			Object obj= clazz.newInstance();
 			if(obj instanceof ITypeExecutor){
-				((ITypeExecutor)obj).sellingExecute(out,offer,sellingOffers,buyingOffers,symbol);
+				((ITypeExecutor)obj).sellingExecute(out,offer,sellingOffers,buyingOffers,symbol,dbConnection);
 			}
 		}catch (ClassNotFoundException ex){
 			throw new DataIllegalException("Invalid type");
@@ -90,12 +92,12 @@ public class Instrument {
         
     }
 
-	public void executeBuyingByType(PrintWriter out, BuyingOffer offer) throws DataIllegalException {
+	public void executeBuyingByType(PrintWriter out, BuyingOffer offer,Connection dbConnection) throws DataIllegalException, DBException, SQLException {
 		try {
 			Class clazz = Class.forName("net.internetengineering.domain.dealing.types."+offer.getType());
 			Object obj= clazz.newInstance();
 			if(obj instanceof ITypeExecutor){
-				((ITypeExecutor)obj).buyingExecute(out,offer,sellingOffers,buyingOffers,symbol);
+				((ITypeExecutor)obj).buyingExecute(out,offer,sellingOffers,buyingOffers,symbol,dbConnection);
 			}
 		}catch (ClassNotFoundException ex){
 			throw new DataIllegalException("Invalid type");
@@ -109,7 +111,8 @@ public class Instrument {
 
 
 	public static void matchingOffers(PrintWriter out,Boolean basedOnBuyerPrice,
-			List<SellingOffer> sellingOffers,List<BuyingOffer>buyingOffers,String sym,String type){
+			List<SellingOffer> sellingOffers,List<BuyingOffer>buyingOffers,String sym,
+                        String type,Connection dbConnection) throws SQLException, DBException{
 
     	SellingOffer sellingOffer = sellingOffers.get(0);
     	BuyingOffer buyingOffer = buyingOffers.get(0);
@@ -141,19 +144,19 @@ public class Instrument {
 						buyingOffers.remove(0);
 					}
 	    		}
-	    		StockMarket.changeCustomerProperty(sellingOffer, buyingOffer, buyPrice, buyQuantity, sym);
-				Customer seller = StockMarket.getInstance().getCustomer(sellingOffer.getID());
-				Customer buyer = StockMarket.getInstance().getCustomer(buyingOffer.getID());
+	    		StockMarket.changeCustomerProperty(sellingOffer, buyingOffer, buyPrice, buyQuantity, sym,dbConnection);
+                            Customer seller = StockMarket.getInstance().getCustomer(sellingOffer.getID(),dbConnection);
+                            Customer buyer = StockMarket.getInstance().getCustomer(buyingOffer.getID(),dbConnection);
 
-				String[] newType = type.split("\\.");
-				System.out.println(newType[newType.length-1]);
-				Transaction t = new Transaction(buyer.getId(),seller.getId(),sym,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
+                            String[] newType = type.split("\\.");
+                            System.out.println(newType[newType.length-1]);
+                            Transaction t = new Transaction(buyer.getId(),seller.getId(),sym,newType[newType.length-1],String.valueOf(buyQuantity),String.valueOf(buyPrice));
 
-				//DB
-					try{
-						TransactionDAO.createTransaction(t);
-					} catch (DBException ex) {
-            			out.print(ex.getMessage());
+                            //DB
+                                    try{
+                                            TransactionDAO.createTransaction(t);
+                                    } catch (DBException ex) {
+                            out.print(ex.getMessage());
             		}
 				//CSVFileWriter.writeCsvFile(t);
 	    		out.println(sellingOffer.getID()+" sold "+buyQuantity+" shares of "+sym+" @"+buyPrice+" to "+buyingOffer.getID());
@@ -193,6 +196,14 @@ public class Instrument {
     		this.quantity += count;
     	else if(type.equals("delete") && HasQuantity(count))
     		this.quantity -= count;
+    }
+
+    public void addSellingOffer(SellingOffer sellingOffer) {
+        this.sellingOffers.add( sellingOffer);
+    }
+
+    public void addBuyingOffer(BuyingOffer buyingOffer) {
+        this.buyingOffers.add( buyingOffer);
     }
     
 }
